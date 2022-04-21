@@ -183,6 +183,7 @@ def scatter_plot_helper(x, y, name, xlabel, ylabel, regression = True):
     plt.tick_params(axis = 'y', color = 'red')
     if regression:
         m, b = compute_slope_intercept(x, y)
+        print("Slope = " + str(m))
         plt.plot([min(x), max(x)],[m*min(x) + b, m*max(x) + b],c="r",lw=5)
     plt.xticks(color = 'red')
     plt.yticks(color = 'crimson')
