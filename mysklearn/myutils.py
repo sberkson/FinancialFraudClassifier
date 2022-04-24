@@ -761,3 +761,14 @@ def remove_incomplete_rules(rules):
     for rule in rules:
         if "THEN" not in rule:
             rules.remove(rule)
+
+
+def get_most_common_label(y_train):
+    labels = {}
+    for label in y_train:
+        if label in labels:
+            labels[label] += 1
+        else:
+            labels[label] = 1
+
+    return max(labels, key=labels.get)

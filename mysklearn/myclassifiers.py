@@ -176,7 +176,7 @@ class MyDummyClassifier:
             Since Zero-R only predicts the most frequent class label, this method
                 only saves the most frequent class label.
         """
-        self.most_common_label = max(y_train, key=y_train.count)
+        self.most_common_label = myutils.get_most_common_label(y_train)
 
     def predict(self, X_test):
         """Makes predictions for test instances in X_test.
