@@ -9,6 +9,7 @@
 ##############################################
 import copy
 import csv
+from itertools import dropwhile
 from tabulate import tabulate
 
 
@@ -434,3 +435,39 @@ class MyPyTable:
         new_table = MyPyTable(new_col_names, new_data)
 
         return new_table
+
+
+    def drop_cols(self, col_names):
+        for col_name in col_names:
+            self.drop_col(col_name)
+    
+
+    def drop_col(self, col_identifier):
+        if type(col_identifier) is int:
+            col_identifier = self.column_names[col_identifier]
+        if (
+            col_identifier.isnumeric()
+        ):  # check to see if the col_identifier is an int (the index) or the string (the label)
+            column_index = int(col_identifier)
+        else:
+            try:
+                column_index = self.column_names.index(col_identifier)
+            except ValueError:  # throw the ValueError if the col_identifier is not a valid column name
+                raise ValueError(
+                    "Invalid column identifier: " + col_identifier)
+
+        new_col_names = []
+        new_data = []
+        for i in range(len(self.data)):
+            new_row = []
+            for j in range(len(self.data[i])):
+                if j != column_index:
+                    new_row.append(self.data[i][j])
+            new_data.append(new_row)
+
+        for i in range(len(self.column_names)):
+            if i != column_index:
+                new_col_names.append(self.column_names[i])
+
+        self.data = new_data
+        self.column_names = new_col_names
