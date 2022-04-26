@@ -115,3 +115,6 @@ print(len(X_test1), len(X_test))
 print(len(X_train1), len(X_train))
 print(len(y_test1), len(y_test))
 print(len(y_train1), len(y_train))
+for val in X:
+    if val not in X_test:
+        print(val)
