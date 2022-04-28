@@ -1,6 +1,9 @@
 import math
 import operator
+from matplotlib.style import available
 import numpy as np
+import mysklearn
+from mysklearn import myclassifiers
 
 
 def compute_euclidean_distance(v1, v2):
@@ -817,3 +820,83 @@ def get_test_remainder(X, y):
             X_remainder.append(X[i])
             y_remainder.append(y[i])
     return X_test, y_test, X_remainder, y_remainder
+
+
+def generate_forest(X_remainder, y_remainder, X_test, y_test, N, M, F):
+    weak_forest = generate_weak_forest(X_remainder, y_remainder, N, F)
+
+    strong_forest = generate_strong_forest(weak_forest, X_test, y_test, M)
+
+    return strong_forest
+
+
+def generate_weak_forest(X_remainder, y_remainder, N, F):
+    """
+    generates a weak forest of size N
+
+    Parameters
+    ----------
+    X_remainder : list
+        list of lists of attributes
+    y_remainder : list
+        list of labels
+    N : int
+        number of trees in the forest
+    F : int
+        the size of the randomly generated subset of the data
+    """
+    weak_forest = []
+    for i in range(N):
+        X_subset = []
+        y_subset = []
+        for j in range(F):
+            # this has a chance of being a duplicate
+            rand_index = np.random.randint(0, len(X_remainder))
+            if X_remainder[rand_index] not in X_subset:
+                X_subset.append(X_remainder[rand_index])
+                y_subset.append(y_remainder[rand_index])
+        # now that we have the subset, we can create the tree
+        tree = myclassifiers.MyDecisionTreeClassifier()
+        tree.fit(X_subset, y_subset)
+        weak_forest.append(tree)
+    return weak_forest
+
+
+def generate_tree(X, y):
+    """
+    generates a tree from the given data
+
+    Parameters
+    ----------
+    X : list
+        list of lists of attributes
+    y : list
+        list of labels
+    """
+    attributes = []
+    for i in range(len(X[0])):
+        attributes.append(i)
+    available_attributes = attributes.copy()
+    tree = tdidt(X, available_attributes, attributes)
+    return tree
+
+
+def generate_strong_forest(weak_forest, X_test, y_test, M):
+    """
+    generates a strong forest of size M
+
+    Parameters
+    ----------
+    weak_forest : list
+        list of weak trees
+    X_test : list
+        list of lists of attributes
+    y_test : list
+        list of labels
+    M : int
+        number of strong trees in the forest
+    """
+    strong_forest = []
+    tree_results = {}
+    for i, tree in enumerate(weak_forest):
+        tree_accuracy = None  # decided to not use this function

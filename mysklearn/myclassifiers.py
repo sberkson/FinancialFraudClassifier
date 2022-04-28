@@ -1,5 +1,5 @@
 import numpy as np
-from mysklearn import myutils
+from mysklearn import myevaluation, myutils
 from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
 
 # TODO: copy your myclassifiers.py solution from PA4-6 here
@@ -412,10 +412,15 @@ class MyRandomForestClassifier:
         self.M = M
         self.F = F
 
-        # first we are going to generate a random stratefied test set
-        # using one third of the data
+        """
+        1. Generate a random stratified test set consisting of one third of the
+            original data set, with the remaining two thirds of the instances forming the "remainder set".
+        """
         X_test, y_test, X_remainder, y_remainder = myutils.get_test_remainder(
             X, y)
+
+        print("X_test", X_test)
+        print("y_test", y_test)
 
         print("The length of X is: " + str(len(X)))
         print("The length of X_test is: " + str(len(X_test)))
@@ -423,23 +428,43 @@ class MyRandomForestClassifier:
         print("The length of y is: " + str(len(y)))
         print("The length of y_test is: " + str(len(y_test)))
         print("The length of y_remainder is: " + str(len(y_remainder)))
-        """
-        1. Generate a random stratified test set consisting of one third of the 
-            original data set, with the remaining two thirds of the instances forming the "remainder set".
 
-        2. Generate N "random" decision trees using bootstrapping 
-            (giving a training and validation set) over the remainder set. 
-            At each node, build your decision trees by randomly selecting F 
-            of the remaining attributes as candidates to partition on. 
-            This is the standard random forest approach discussed in class. 
-            Note that to build your decision trees you should still use entropy; 
+        """
+        2. Generate N "random" decision trees using bootstrapping
+            (giving a training and validation set) over the remainder set.
+            At each node, build your decision trees by randomly selecting F
+            of the remaining attributes as candidates to partition on.
+            This is the standard random forest approach discussed in class.
+            Note that to build your decision trees you should still use entropy;
             however, you are selecting from only a (randomly chosen) subset of the available attributes.
-
-        3. Select the M most accurate of the N decision trees using the corresponding validation sets.
-
-        4. Use simple majority voting to predict classes using the M decision trees over the test set.
-
         """
+        weak_forest = myutils.generate_weak_forest(
+            X_remainder, y_remainder, N,  F)
+
+        tree_results = {}
+        tree_averages = []
+        for i, tree in enumerate(weak_forest):
+            tree_predicted = tree.predict(X_test)
+            tree_results[i] = []
+            tree_results[i].append(
+                myevaluation.accuracy_score(y_test, tree_predicted))
+            tree_results[i].append(
+                myevaluation.binary_precision_score(y_test, tree_predicted))
+            tree_results[i].append(
+                myevaluation.binary_recall_score(y_test, tree_predicted))
+            tree_results[i].append(
+                myevaluation.binary_f1_score(y_test, tree_predicted))
+            tree_averages.append([i, sum(tree_results[i]) / 4])
+        # now that we have all ofthe results, we can find the best M ones
+        sorted_results = tree_averages.copy()
+        sorted_results.sort(key=lambda x: x[1], reverse=True)
+        best_trees = sorted_results[:M]
+        # print("The best trees are: " + str(best_trees))
+        # we know the first index of the best trees is the index of the tree
+        strong_forest = []
+        for i in best_trees:
+            strong_forest.append(weak_forest[i[0]])
+        self.forest = strong_forest
 
     def predict(self, X_test):
         """Makes predictions for test instances in X_test.
