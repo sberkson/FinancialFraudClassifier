@@ -772,3 +772,48 @@ def get_most_common_label(y_train):
             labels[label] = 1
 
     return max(labels, key=labels.get)
+
+
+def forrest_predict_row(forrest, row):
+    predictions = []
+    for tree in forrest:
+        predictions.append(tdidt_predict(tree, row))
+    return max(predictions, key=predictions.count)
+
+
+def get_test_remainder(X, y):
+    possible_attributes = {}
+    stratefied_indexes = []
+    for i in range(len(y)):
+        if y[i] not in possible_attributes:
+            possible_attributes[y[i]] = []
+        possible_attributes[y[i]].append(i)
+    print(possible_attributes.keys())
+    for i in range(len(possible_attributes[1.0])//3):
+        # a faster, but not random way to do this
+        # rand_index = i
+        # new_data.append(fraudulent[rand_index])
+        # a slower, but random way to do thi
+        rand_index = np.random.randint(0, len(possible_attributes[1.0]))
+        stratefied_indexes.append(possible_attributes[1.0].pop(rand_index))
+    for i in range(len(possible_attributes[0.0])//3):
+        # a faster, but not random way to do this
+        # rand_index = i
+        # new_data.append(legal[rand_index])
+        # a slower, but random way to do this
+        rand_index = np.random.randint(0, len(possible_attributes[0.0]))
+        stratefied_indexes.append(possible_attributes[0.0].pop(rand_index))
+    # now that we have the indexes, we can create the test set
+    X_test = []
+    y_test = []
+    for i in stratefied_indexes:
+        X_test.append(X[i])
+        y_test.append(y[i])
+    # we can also take the leftovers from the possible attributes dictionary to make the remainder set
+    X_remainder = []
+    y_remainder = []
+    for key in possible_attributes.keys():
+        for i in possible_attributes[key]:
+            X_remainder.append(X[i])
+            y_remainder.append(y[i])
+    return X_test, y_test, X_remainder, y_remainder

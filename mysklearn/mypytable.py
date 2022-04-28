@@ -436,11 +436,9 @@ class MyPyTable:
 
         return new_table
 
-
     def drop_cols(self, col_names):
         for col_name in col_names:
             self.drop_col(col_name)
-    
 
     def drop_col(self, col_identifier):
         if type(col_identifier) is int:
@@ -471,3 +469,34 @@ class MyPyTable:
 
         self.data = new_data
         self.column_names = new_col_names
+
+    def convert_col_to_int(self, col_identifier):
+        if type(col_identifier) is int:
+            col_identifier = self.column_names[col_identifier]
+        if (
+            col_identifier.isnumeric()
+        ):
+            column_index = int(col_identifier)
+        else:
+            try:
+                column_index = self.column_names.index(col_identifier)
+            except ValueError:
+                raise ValueError(
+                    "Invalid column identifier: " + col_identifier)
+
+        col_vals = set(self.get_column(str(column_index)))
+        # now we can make a dictionary with the values as keys and a unique int as the value
+        new_col_vals = {}
+        for i in range(len(col_vals)):
+            new_col_vals[col_vals.pop()] = i
+        print(new_col_vals)
+        new_data = []
+        for i in range(len(self.data)):
+            new_row = []
+            for j in range(len(self.data[i])):
+                if j != column_index:
+                    new_row.append(self.data[i][j])
+                if j == column_index:
+                    new_row.append(new_col_vals[self.data[i][j]])
+            new_data.append(new_row)
+        self.data = new_data

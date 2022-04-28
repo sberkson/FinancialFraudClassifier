@@ -1,3 +1,4 @@
+import numpy as np
 from mysklearn import myutils
 from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
 
@@ -360,3 +361,97 @@ class MyDecisionTreeClassifier:
             You will need to install graphviz in the Docker container as shown in class to complete this method.
         """
         pass  # TODO: (BONUS) fix this
+
+
+class MyRandomForestClassifier:
+    """Represents a random forest classifier.
+
+    Attributes:
+        X_train(list of list of obj): The list of training instances (samples).
+                The shape of X_train is (n_train_samples, n_features)
+        y_train(list of obj): The target y values (parallel to X_train).
+            The shape of y_train is n_samples
+        forest(list of MyDecisionTreeClassifier): The list of decision tree classifiers.
+        N (int): The number of weak learners.
+        M (int): The number of better learners.
+        F (int): The number of random attribute subsets.
+
+
+    Notes:
+        Loosely based on sklearn's RandomForestClassifier:
+            https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+    """
+
+    def __init__(self):
+        """Initializer for MyRandomForestClassifier.
+        """
+        self.X = None
+        self.y = None
+        self.forest = []
+        self.N = None
+        self.M = None
+        self.F = None
+
+    def fit(self, X, y, N, M, F):
+        """Fits a random forest classifier to X_train and y_train using the TDIDT
+        (top down induction of decision tree) algorithm.
+
+        Args:
+            X (list of list of obj): The list of training instances (samples).
+                The shape of X is (n_train_samples, n_features)
+            y (list of obj): The target y values (parallel to X).
+                The shape of y is n_train_samples
+            N (int): The number of weak learners.
+            M (int): The number of better learners.
+            F (int): The number of random attribute subsets.
+
+        """
+        self.X = X
+        self.y = y
+        self.N = N
+        self.M = M
+        self.F = F
+
+        # first we are going to generate a random stratefied test set
+        # using one third of the data
+        X_test, y_test, X_remainder, y_remainder = myutils.get_test_remainder(
+            X, y)
+
+        print("The length of X is: " + str(len(X)))
+        print("The length of X_test is: " + str(len(X_test)))
+        print("The length of X_remainder is: " + str(len(X_remainder)))
+        print("The length of y is: " + str(len(y)))
+        print("The length of y_test is: " + str(len(y_test)))
+        print("The length of y_remainder is: " + str(len(y_remainder)))
+        """
+        1. Generate a random stratified test set consisting of one third of the 
+            original data set, with the remaining two thirds of the instances forming the "remainder set".
+
+        2. Generate N "random" decision trees using bootstrapping 
+            (giving a training and validation set) over the remainder set. 
+            At each node, build your decision trees by randomly selecting F 
+            of the remaining attributes as candidates to partition on. 
+            This is the standard random forest approach discussed in class. 
+            Note that to build your decision trees you should still use entropy; 
+            however, you are selecting from only a (randomly chosen) subset of the available attributes.
+
+        3. Select the M most accurate of the N decision trees using the corresponding validation sets.
+
+        4. Use simple majority voting to predict classes using the M decision trees over the test set.
+
+        """
+
+    def predict(self, X_test):
+        """Makes predictions for test instances in X_test.
+
+            Args:
+                X_test(list of list of obj): The list of testing samples
+                    The shape of X_test is (n_test_samples, n_features)
+
+            Returns:
+                y_predicted(list of obj): The predicted target y values (parallel to X_test)
+        """
+        y_predicted = []
+        for row in X_test:
+            y_predicted.append(myutils.forrest_predict_row(self.forest, row))
+        return y_predicted
