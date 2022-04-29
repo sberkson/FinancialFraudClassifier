@@ -777,9 +777,9 @@ def get_most_common_label(y_train):
     return max(labels, key=labels.get)
 
 
-def forrest_predict_row(forrest, row):
+def forest_predict_row(forest, row):
     predictions = []
-    for tree in forrest:
+    for tree in forest:
         predictions.append(tdidt_predict(tree.tree, row))
     return max(predictions, key=predictions.count)
 

@@ -479,5 +479,5 @@ class MyRandomForestClassifier:
         """
         y_predicted = []
         for row in X_test:
-            y_predicted.append(myutils.forrest_predict_row(self.forest, row))
+            y_predicted.append(myutils.forest_predict_row(self.forest, row))
         return y_predicted
