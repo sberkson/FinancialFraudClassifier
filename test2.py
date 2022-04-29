@@ -1,3 +1,4 @@
+from configparser import MAX_INTERPOLATION_DEPTH
 import importlib
 import random
 
@@ -20,15 +21,14 @@ print(mytable.data[0])
 # we know from my datachoping notebook what each column is and does
 # mytable.drop_cols(['step','type','nameOrig', 'oldbalanceOrg', 'newbalanceOrig', 'nameDest', 'oldbalanceDest', 'newbalanceDest', 'isFlaggedFraud'])
 # we dont need step, nameOrig, nameDest, isFlaggedFraud
-mytable.drop_cols(["step", "nameOrig", "nameDest", "isFlaggedFraud"])
+mytable.drop_cols(["step", "isFlaggedFraud"])
+# mytable.drop_cols(["step", "nameOrig", "nameDest", "isFlaggedFraud"])
 # this is because:
 # step: this is just the time from the start of the data collection
 # nameOrig: this is the name of the person who sent the money
 # nameDest: this is the name of the person who received the money
 # isFlaggedFraud: this is the classification results for the AI that the group that collected the data created
 
-print(mytable.data[0])
-print(mytable.column_names)
 
 # the values of type are strings, so we will convert them to ints to be able to be used in the classifiers
 mytable.convert_col_to_int("type")
@@ -42,10 +42,6 @@ y = []
 for row in data:
     X.append(row[0: len(row) - 1])
     y.append(row[-1])
-
-
-forest_clf = myclassifiers.MyRandomForestClassifier()
-forest_clf.fit(X, y, 100, 10, 2)
 
 
 X_test = [
@@ -1146,4 +1142,12 @@ y_test = [
 ]
 
 
+n = 1000
+m = 15
+f = 4
+
+forest_clf = myclassifiers.MyRandomForestClassifier(random_state=100)
+forest_clf.fit(X, y, n, m, f)
 y_predicted = forest_clf.predict(X_test)
+accuracy = myevaluation.accuracy_score(y_test, y_predicted)
+print("Accuracy:", accuracy)

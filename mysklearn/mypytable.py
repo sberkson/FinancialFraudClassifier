@@ -484,12 +484,23 @@ class MyPyTable:
                 raise ValueError(
                     "Invalid column identifier: " + col_identifier)
 
-        col_vals = set(self.get_column(str(column_index)))
+        # col_vals = list(dict.fromkeys(self.get_column(str(column_index))).keys())
+        col = self.get_column(str(column_index))
+        # col_vals = []
+        # for i in range(len(col)):
+        #     if col[i] not in col_vals:
+        #         col_vals.append(col[i])
+        col_vals = list(set(col))
+        print(col_vals)
+        # discovered this is the most efficient order
+        if 'CASH_OUT' and 'CASH_IN' and 'TRANSFER' and 'DEBIT' and 'PAYMENT' in col_vals:
+            col_vals = ['CASH_OUT',  'CASH_IN', 'TRANSFER', 'DEBIT', 'PAYMENT']
+        print(col_vals)
+
         # now we can make a dictionary with the values as keys and a unique int as the value
         new_col_vals = {}
         for i in range(len(col_vals)):
             new_col_vals[col_vals.pop()] = i
-        print(new_col_vals)
         new_data = []
         for i in range(len(self.data)):
             new_row = []

@@ -780,18 +780,20 @@ def get_most_common_label(y_train):
 def forrest_predict_row(forrest, row):
     predictions = []
     for tree in forrest:
-        predictions.append(tdidt_predict(tree, row))
+        predictions.append(tdidt_predict(tree.tree, row))
     return max(predictions, key=predictions.count)
 
 
-def get_test_remainder(X, y):
+def get_test_remainder(X, y, random_state=None):
+    if random_state is not None:
+        np.random.seed(random_state)
     possible_attributes = {}
     stratefied_indexes = []
     for i in range(len(y)):
         if y[i] not in possible_attributes:
             possible_attributes[y[i]] = []
         possible_attributes[y[i]].append(i)
-    print(possible_attributes.keys())
+    # print(possible_attributes.keys())
     for i in range(len(possible_attributes[1.0])//3):
         # a faster, but not random way to do this
         # rand_index = i
@@ -819,6 +821,7 @@ def get_test_remainder(X, y):
         for i in possible_attributes[key]:
             X_remainder.append(X[i])
             y_remainder.append(y[i])
+    # print(X_test[0])
     return X_test, y_test, X_remainder, y_remainder
 
 
@@ -830,7 +833,7 @@ def generate_forest(X_remainder, y_remainder, X_test, y_test, N, M, F):
     return strong_forest
 
 
-def generate_weak_forest(X_remainder, y_remainder, N, F):
+def generate_weak_forest(X_remainder, y_remainder, N, F, random_state=None):
     """
     generates a weak forest of size N
 
@@ -845,6 +848,9 @@ def generate_weak_forest(X_remainder, y_remainder, N, F):
     F : int
         the size of the randomly generated subset of the data
     """
+    if random_state is not None:
+        # print("seed", random_state)
+        np.random.seed(random_state)
     weak_forest = []
     for i in range(N):
         X_subset = []

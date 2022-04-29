@@ -382,7 +382,7 @@ class MyRandomForestClassifier:
             https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
     """
 
-    def __init__(self):
+    def __init__(self, random_state=None):
         """Initializer for MyRandomForestClassifier.
         """
         self.X = None
@@ -391,6 +391,7 @@ class MyRandomForestClassifier:
         self.N = None
         self.M = None
         self.F = None
+        self.random_state = random_state
 
     def fit(self, X, y, N, M, F):
         """Fits a random forest classifier to X_train and y_train using the TDIDT
@@ -417,17 +418,17 @@ class MyRandomForestClassifier:
             original data set, with the remaining two thirds of the instances forming the "remainder set".
         """
         X_test, y_test, X_remainder, y_remainder = myutils.get_test_remainder(
-            X, y)
+            X, y, random_state=self.random_state)
 
-        print("X_test", X_test)
-        print("y_test", y_test)
+        # print("X_test", X_test[0])
+        # print("y_test", y_test)
 
-        print("The length of X is: " + str(len(X)))
-        print("The length of X_test is: " + str(len(X_test)))
-        print("The length of X_remainder is: " + str(len(X_remainder)))
-        print("The length of y is: " + str(len(y)))
-        print("The length of y_test is: " + str(len(y_test)))
-        print("The length of y_remainder is: " + str(len(y_remainder)))
+        # print("The length of X is: " + str(len(X)))
+        # print("The length of X_test is: " + str(len(X_test)))
+        # print("The length of X_remainder is: " + str(len(X_remainder)))
+        # print("The length of y is: " + str(len(y)))
+        # print("The length of y_test is: " + str(len(y_test)))
+        # print("The length of y_remainder is: " + str(len(y_remainder)))
 
         """
         2. Generate N "random" decision trees using bootstrapping
@@ -439,8 +440,8 @@ class MyRandomForestClassifier:
             however, you are selecting from only a (randomly chosen) subset of the available attributes.
         """
         weak_forest = myutils.generate_weak_forest(
-            X_remainder, y_remainder, N,  F)
-
+            X_remainder, y_remainder, N,  F, random_state=self.random_state)
+        # print(weak_forest[0].tree)
         tree_results = {}
         tree_averages = []
         for i, tree in enumerate(weak_forest):
