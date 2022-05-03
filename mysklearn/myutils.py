@@ -794,20 +794,21 @@ def get_test_remainder(X, y, random_state=None):
             possible_attributes[y[i]] = []
         possible_attributes[y[i]].append(i)
     # print(possible_attributes.keys())
-    for i in range(len(possible_attributes[1.0])//3):
-        # a faster, but not random way to do this
-        # rand_index = i
-        # new_data.append(fraudulent[rand_index])
-        # a slower, but random way to do thi
-        rand_index = np.random.randint(0, len(possible_attributes[1.0]))
-        stratefied_indexes.append(possible_attributes[1.0].pop(rand_index))
-    for i in range(len(possible_attributes[0.0])//3):
-        # a faster, but not random way to do this
-        # rand_index = i
-        # new_data.append(legal[rand_index])
-        # a slower, but random way to do this
-        rand_index = np.random.randint(0, len(possible_attributes[0.0]))
-        stratefied_indexes.append(possible_attributes[0.0].pop(rand_index))
+    for key in possible_attributes.keys():
+        for i in range(len(possible_attributes[key])//3):
+            # a faster, but not random way to do this
+            # rand_index = i
+            # new_data.append(fraudulent[rand_index])
+            # a slower, but random way to do thi
+            rand_index = np.random.randint(0, len(possible_attributes[key]))
+            stratefied_indexes.append(possible_attributes[key].pop(rand_index))
+    # for i in range(len(possible_attributes[0.0])//3):
+    #     # a faster, but not random way to do this
+    #     # rand_index = i
+    #     # new_data.append(legal[rand_index])
+    #     # a slower, but random way to do this
+    #     rand_index = np.random.randint(0, len(possible_attributes[0.0]))
+    #     stratefied_indexes.append(possible_attributes[0.0].pop(rand_index))
     # now that we have the indexes, we can create the test set
     X_test = []
     y_test = []
