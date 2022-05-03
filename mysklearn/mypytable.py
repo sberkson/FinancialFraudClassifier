@@ -491,11 +491,11 @@ class MyPyTable:
         #     if col[i] not in col_vals:
         #         col_vals.append(col[i])
         col_vals = list(set(col))
-        print(col_vals)
+        # print(col_vals) **********REMOVED FOR PRESENTATION**********
         # discovered this is the most efficient order
         if 'CASH_OUT' and 'CASH_IN' and 'TRANSFER' and 'DEBIT' and 'PAYMENT' in col_vals:
             col_vals = ['CASH_OUT',  'CASH_IN', 'TRANSFER', 'DEBIT', 'PAYMENT']
-        print(col_vals)
+        # print(col_vals) **********REMOVED FOR PRESENTATION**********
 
         # now we can make a dictionary with the values as keys and a unique int as the value
         new_col_vals = {}
