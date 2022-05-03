@@ -123,6 +123,10 @@ def folds_to_train_test(X_train_folds, X_test_folds, y_train_folds, y_test_folds
 
 
 def indexes_to_fold(X_train_indexes, X_test_indexes, X, y):
+    """
+    Given the indexes of the training and testing instances,
+    return the folds of the training and testing instances.
+    """
     # now find y_train and y_test
     y_train_folds = []
     y_test_folds = []
@@ -252,6 +256,9 @@ def group_by(data):
 
 
 def get_column(table, col_index):
+    """
+    Returns the column at the given index.
+    """
     col = []
     for row in table:
         value = row[col_index]
@@ -447,6 +454,24 @@ def get_prediction_naive_bayes(row, posteriors, priors):
 # TREEEEEEE
 
 def tdidt(current_instances, available_attributes, header):
+    """
+    Calculates the prediction of a row using naive bayes
+
+    Parameters
+    ----------
+    current_instances : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+    available_attributes : list
+        A list of strings. Each string represents an attribute.
+    header : list
+        A list of strings. Each string represents a class label.
+
+    Returns
+    -------
+    string
+        A string representing the predicted class label.
+    """
     # basic approach (uses recursion!!):
     # print(current_instances)
     # select an attribute to split on
@@ -523,6 +548,21 @@ def majority_vote(instances):
 
 
 def all_same_class(att_partition):
+    """
+    Checks if all class labels in a partition are the same
+
+    Parameters
+    ----------
+    att_partition : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+
+    Returns
+    -------
+    bool
+        True if all class labels in the partition are the same, False
+        otherwise.
+    """
     # look through all the [-1] and if they all are the same return true
     for i in range(len(att_partition)):
         try:
@@ -535,6 +575,24 @@ def all_same_class(att_partition):
 
 
 def select_attribute(current_instances, available_attributes, header):
+    """
+    Selects the attribute to split on
+
+    Parameters
+    ----------
+    current_instances : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+    available_attributes : list
+        A list of strings. Each string represents an attribute.
+    header : list
+        A list of strings. Each string represents a header.
+
+    Returns
+    -------
+    string
+        A string representing the attribute to split on.
+    """
     # TODO:
     # use entropy to calculate and chose the attribute
     # with the smallest E_new
@@ -564,6 +622,22 @@ def select_attribute(current_instances, available_attributes, header):
 
 
 def get_e_new(partitian_entropies, partitians):
+    """
+    Calculates the weighted sum of the partition entropies
+
+    Parameters
+    ----------
+    partitian_entropies : list
+        A list of floats. Each float represents the entropy of a partition.
+    partitians : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+
+    Returns
+    -------
+    float
+        The weighted sum of the partition entropies.
+    """
     e_new = 0
     total = 0
     e_vals = []
@@ -579,6 +653,20 @@ def get_e_new(partitian_entropies, partitians):
 
 
 def get_partition_entropies(partitions):
+    """
+    Calculates the entropy of each partition
+
+    Parameters
+    ----------
+    partitions : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+
+    Returns
+    -------
+    list
+        A list of floats. Each float represents the entropy of a partition.
+    """
     # get the entropy for each partition
     entropies = []
     for partition in partitions.values():
@@ -590,6 +678,19 @@ def get_partition_entropies(partitions):
 
 
 def get_entropy(partition):
+    """
+    Calculates the entropy of a partition
+
+    Parameters
+    ----------
+    partition : list
+        A list of strings. Each string represents a training instance.
+        
+    Returns
+    -------
+    float
+        The entropy of the partition.
+    """
     # get the class labels
     class_labels = [instance[-1] for instance in partition]
     # get the unique class labels
@@ -606,6 +707,19 @@ def get_entropy(partition):
 
 
 def get_entropy_from_probabilities(probabilities):
+    """
+    Calculates the entropy of a partition
+
+    Parameters
+    ----------
+    probabilities : list
+        A list of floats. Each float represents the probability of a class.
+
+    Returns
+    -------
+    float
+        The entropy of the partition.
+    """
     # get the entropy from the probabilities
     # THIS IS ASSUMONG ITS NOT 0
     entropy = -sum([prob * math.log(prob, 2) for prob in probabilities])
@@ -613,6 +727,28 @@ def get_entropy_from_probabilities(probabilities):
 
 
 def partition_instances(current_instances, split_attribute, header, attribute_domains):
+    """
+    Partitions the instances based on the given attribute
+
+    Parameters
+    ----------
+    current_instances : list
+        A list of lists of strings. Each inner list represents a training
+        instance.
+    split_attribute : string
+        A string representing the attribute to split on.
+    header : list
+        A list of strings. Each string represents a header.
+    attribute_domains : list
+        A list of strings. Each string represents an attribute.
+
+    Returns
+    -------
+    dict
+        A dictionary of lists of lists of strings. The keys are the values of
+        the split attribute. The values are the lists of instances that have
+        that value for the split attribute.
+    """
     # group by attribute domain
     #   use the attrobite_domains thing
     # key (attribute value)[junior, mid, seinor]: value (subtable) [values for junior, values for mid, values for senior]
@@ -637,6 +773,21 @@ def partition_instances(current_instances, split_attribute, header, attribute_do
 
 
 def tdidt_predict(tree, instance):
+    """
+    Predicts the class label of the given instance using the given tree
+
+    Parameters
+    ----------
+    tree : list
+        A multi-dimentional list representing a decision tree.
+    instance : list
+        A list of strings. Each string represents an attribute.
+
+    Returns
+    -------
+    string
+        The predicted class label.
+    """
     # recursively traverse the tree
     # we need to know wher we are in the tree
     # are we at a leaf node? (base case)
@@ -682,6 +833,25 @@ def tdidt_predict(tree, instance):
 #     return uniques
 
 def get_lines_rules_encoded(tree, attribute_names=None, class_label="class", depth=0):
+    """
+    Returns a list of strings representing the rules in the tree.
+
+    Parameters
+    ----------
+    tree : list
+        A multi-dimentional list representing a decision tree.
+    attribute_names : list
+        A list of strings. Each string represents an attribute.
+    class_label : string
+        A string representing the class label.
+    depth : int
+        An int representing the depth of the tree.
+
+    Returns
+    -------
+    list
+        A list of strings. Each string represents a rule. (ENCODED)
+    """
     # now its either attribute or value
     uniques = []
     if tree[0] == "Leaf":  # reahed the end of a rule
@@ -726,6 +896,23 @@ def get_lines_rules_encoded(tree, attribute_names=None, class_label="class", dep
 
 
 def get_all_line_rules(tree, attribute_names=None, class_label="class"):
+    """
+    Returns a list of strings representing the rules in the tree.
+
+    Parameters
+    ----------
+    tree : list
+        A multi-dimentional list representing a decision tree.
+    attribute_names : list
+        A list of strings. Each string represents an attribute.
+    class_label : string
+        A string representing the class label.
+
+    Returns
+    -------
+    list
+        A list of strings. Each string represents a rule.
+    """
     routes = get_lines_rules_encoded(tree, attribute_names, class_label)
     decoded_routes = []
     decode_line(routes, decoded_routes)
@@ -734,6 +921,23 @@ def get_all_line_rules(tree, attribute_names=None, class_label="class"):
 
 
 def decode_line(route_pos, decoded_routes, previous_string=None):
+    """
+    Decodes a list of strings representing a rule.
+
+    Parameters
+    ----------
+    route_pos : list
+        A list of strings. Each string represents a rule.
+    decoded_routes : list
+        A list of strings. Each string represents a rule.
+    previous_string : string
+        A string representing the previous rule.
+
+    Returns
+    -------
+    list
+        A list of strings. Each string represents a rule.
+    """
     if previous_string is None:
         line = str(route_pos[0])
         for i in range(1, len(route_pos)):
@@ -752,6 +956,19 @@ def decode_line(route_pos, decoded_routes, previous_string=None):
 
 
 def remove_invalid_rules(rules):
+    """
+    Removes invalid rules from a list of strings representing a rule.
+
+    Parameters
+    ----------
+    rules : list
+        A list of strings. Each string represents a rule.
+    
+    Returns
+    -------
+    list
+        A list of strings. Each string represents a rule.
+    """
     while("None" in rules):
         rules.remove("None")
     while(None in rules):
@@ -761,12 +978,38 @@ def remove_invalid_rules(rules):
 
 
 def remove_incomplete_rules(rules):
+    """
+    Removes incomplete rules from a list of strings representing a rule.
+
+    Parameters
+    ----------
+    rules : list
+        A list of strings. Each string represents a rule.
+
+    Returns
+    -------
+    list
+        A list of strings. Each string represents a rule.
+    """
     for rule in rules:
         if "THEN" not in rule:
             rules.remove(rule)
 
 
 def get_most_common_label(y_train):
+    """
+    Returns the most common label in a list of labels.
+
+    Parameters
+    ----------
+    y_train : list
+        A list of labels.
+
+    Returns
+    -------
+    string
+        A string representing the most common label.
+    """
     labels = {}
     for label in y_train:
         if label in labels:
@@ -778,6 +1021,21 @@ def get_most_common_label(y_train):
 
 
 def forest_predict_row(forest, row):
+    """
+    Uses a forest to predict a label for a row.
+
+    Parameters
+    ----------
+    forest : list
+        A list of trees.
+    row : list
+        A list of values.
+
+    Returns
+    -------
+    string
+        A string representing the predicted label.
+    """
     predictions = []
     for tree in forest:
         predictions.append(tdidt_predict(tree.tree, row))
@@ -785,6 +1043,25 @@ def forest_predict_row(forest, row):
 
 
 def get_test_remainder(X, y, random_state=None):
+    """
+    Returns the test remainder of a dataset.
+
+    Parameters
+    ----------
+    X : list
+        A list of lists. Each list represents a row.
+    y : list
+        A list of labels.
+    random_state : int
+        An integer representing the random state.
+
+    Returns
+    ------- 
+    list
+        A list of lists. Each list represents a row.
+    list
+        A list of labels.
+    """
     if random_state is not None:
         np.random.seed(random_state)
     possible_attributes = {}
@@ -824,14 +1101,6 @@ def get_test_remainder(X, y, random_state=None):
             y_remainder.append(y[i])
     # print(X_test[0])
     return X_test, y_test, X_remainder, y_remainder
-
-
-def generate_forest(X_remainder, y_remainder, X_test, y_test, N, M, F):
-    weak_forest = generate_weak_forest(X_remainder, y_remainder, N, F)
-
-    strong_forest = generate_strong_forest(weak_forest, X_test, y_test, M)
-
-    return strong_forest
 
 
 def generate_weak_forest(X_remainder, y_remainder, N, F, random_state=None):
@@ -886,24 +1155,3 @@ def generate_tree(X, y):
     available_attributes = attributes.copy()
     tree = tdidt(X, available_attributes, attributes)
     return tree
-
-
-def generate_strong_forest(weak_forest, X_test, y_test, M):
-    """
-    generates a strong forest of size M
-
-    Parameters
-    ----------
-    weak_forest : list
-        list of weak trees
-    X_test : list
-        list of lists of attributes
-    y_test : list
-        list of labels
-    M : int
-        number of strong trees in the forest
-    """
-    strong_forest = []
-    tree_results = {}
-    for i, tree in enumerate(weak_forest):
-        tree_accuracy = None  # decided to not use this function
