@@ -14,7 +14,6 @@ import matplotlib as mpl
 
 mpl.rcParams["savefig.directory"] = os.path.dirname(os.path.abspath(__file__)) + "/media"
 
-print("path: " + os.path.dirname(os.path.abspath(__file__)) + "media/")
 
 
 def plot_occurance_bar(mypytable, attribute, title=None, limit=None, rotation=0):
