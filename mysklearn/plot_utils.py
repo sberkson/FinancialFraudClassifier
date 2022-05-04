@@ -1,14 +1,20 @@
 ##############################################
-# Programmer: Ben Puryear
-# Class: CptS 322-02, Spring 2022
-# Programming Assignment #3
-# 2/22/2022
-# I did not attempt the bonus...
-#
+# Programmers: Sam Berkson and Ben Puryear
+# Class: CPSC 322-02, Spring 2022
+# Final Project
+# 5/4/22
+# 
 # Description: This is the file that contains the functions that will be used to
 # plot the data.
 ##############################################
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import os
+import matplotlib as mpl
+
+mpl.rcParams["savefig.directory"] = os.path.dirname(os.path.abspath(__file__)) + "/media"
+
+print("path: " + os.path.dirname(os.path.abspath(__file__)) + "media/")
 
 
 def plot_occurance_bar(mypytable, attribute, title=None, limit=None, rotation=0):
@@ -23,9 +29,12 @@ def plot_occurance_bar(mypytable, attribute, title=None, limit=None, rotation=0)
     plt.bar(no_dupes, occurance)
     if title is not None:
         plt.title(title)
+    else:
+        title = "Occurance Chart"
     plt.xlabel(attribute)
     plt.ylabel("Occurance")
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -50,6 +59,9 @@ def plot_percentage_of_total_pie(mypytable, attributes, title=None, limit=None):
     plt.pie(attribute_sums, labels=attributes, autopct="%1.1f%%")
     if title is not None:
         plt.title(title)
+    else:
+        title = "Pie Chart"
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -64,9 +76,12 @@ def plot_occurance_bar_list(
     plt.bar(no_dupes, occurance)
     if title is not None:
         plt.title(title)
+    else:
+        title = "Bar Plot"
     plt.xlabel(attribute)
     plt.ylabel("Occurance")
     plt.xticks(x_labels, rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -78,9 +93,12 @@ def plot_histogram(data, attribute=None, title=None, limit=None, rotation=0):
     plt.hist(data, bins=10)
     if title is not None:
         plt.title(title)
+    else:
+        title = "Histogram"
     plt.xlabel(attribute)
     plt.ylabel("Occurance")
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -91,9 +109,12 @@ def plot_scatter(data, attribute_x, attribute_y, title=None, limit=None, rotatio
     plt.scatter(data.get_column(attribute_x), data.get_column(attribute_y))
     if title is not None:
         plt.title(title)
+    else:
+        title = "Scatter Plot"
     plt.xlabel(attribute_x)
     plt.ylabel(attribute_y)
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -104,7 +125,10 @@ def plot_scatter_list(x, y, title=None, limit=None, rotation=0):
     plt.scatter(x, y)
     if title is not None:
         plt.title(title)
+    else:
+        title = "Scatter Plot"
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -115,9 +139,12 @@ def plot_bar_dict(dictionary, title=None, limit=None, rotation=0):
     plt.bar(dictionary.keys(), dictionary.values())
     if title is not None:
         plt.title(title)
+    else:
+        title = "Bar Plot"
     plt.xlabel("Attribute")
     plt.ylabel("Occurance")
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 
@@ -128,9 +155,12 @@ def plot_box_and_whisker(data, attribute=None, title=None, limit=None, rotation=
     plt.boxplot(data)
     if title is not None:
         plt.title(title)
+    else:
+        title = "Box and Whisker Plot"
     plt.xlabel(attribute)
     plt.ylabel("Occurance")
     plt.xticks(rotation=rotation)
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 def hist_helper(column, name, xlabel, ylabel):
@@ -145,6 +175,8 @@ def hist_helper(column, name, xlabel, ylabel):
     plt.title(name, color = 'red')
     plt.tick_params(axis = 'x', colors = 'red')
     plt.tick_params(axis = 'y', colors = 'red')
+    plt.savefig(name + ".png")
+    plt.show()
 
 def pie_chart_helper(data, label, title):
     """
@@ -153,6 +185,7 @@ def pie_chart_helper(data, label, title):
     plt.figure()
     plt.pie(data, labels = label, autopct = '%1.1f%%', startangle = 90, shadow = True, textprops={'color':'pink'}, normalize=True)
     plt.title(title, color = 'red')
+    plt.savefig("media/" + title + ".png")
     plt.show()
 
 def bar_chart_helper(x, y, name, xlabel, ylabel):
@@ -161,13 +194,14 @@ def bar_chart_helper(x, y, name, xlabel, ylabel):
     '''
     plt.figure()
     plt.bar(x, y, color = 'blue' , edgecolor = 'black', linewidth = 1.1)
-    plt.title(name, color = 'red')
-    plt.xlabel(xlabel, color = 'red')
-    plt.ylabel(ylabel, color = 'red')
-    plt.xticks(rotation=90, color = 'red')
-    plt.yticks(color = 'red')
-    plt.tick_params(axis = 'x', color = 'red')
-    plt.tick_params(axis = 'y', color = 'red')
+    plt.title(name, color = 'black')
+    plt.xlabel(xlabel, color = 'black')
+    plt.ylabel(ylabel, color = 'black')
+    plt.xticks(rotation=90, color = 'black')
+    plt.yticks(color = 'black')
+    plt.tick_params(axis = 'x', color = 'black')
+    plt.tick_params(axis = 'y', color = 'black')
+    plt.savefig(name + ".png")
     plt.show()
 
 def scatter_plot_helper(x, y, name, xlabel, ylabel, regression = True):
@@ -188,6 +222,7 @@ def scatter_plot_helper(x, y, name, xlabel, ylabel, regression = True):
     plt.xticks(color = 'red')
     plt.yticks(color = 'crimson')
     plt.grid(True)
+    plt.savefig(name + ".png")
     plt.show()
 
 def compute_slope_intercept(x, y):
