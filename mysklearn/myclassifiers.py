@@ -2,9 +2,6 @@ import numpy as np
 from mysklearn import myevaluation, myutils
 from mysklearn.mysimplelinearregressor import MySimpleLinearRegressor
 
-# TODO: copy your myclassifiers.py solution from PA4-6 here
-
-
 class MySimpleLinearRegressionClassifier:
     """Represents a simple linear regression classifier that discretizes
         predictions from a simple linear regressor (see MySimpleLinearRegressor).
