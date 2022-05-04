@@ -38,7 +38,7 @@ def plot_occurance_bar(mypytable, attribute, title=None, limit=None, rotation=0)
         if i == " ":
             title = title.replace(" ", "_")
 
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -69,7 +69,7 @@ def plot_percentage_of_total_pie(mypytable, attributes, title=None, limit=None):
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -92,7 +92,7 @@ def plot_occurance_bar_list(
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -112,7 +112,7 @@ def plot_histogram(data, attribute=None, title=None, limit=None, rotation=0):
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -131,7 +131,7 @@ def plot_scatter(data, attribute_x, attribute_y, title=None, limit=None, rotatio
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -148,7 +148,7 @@ def plot_scatter_list(x, y, title=None, limit=None, rotation=0):
         if i == " ":
             title = title.replace(" ", "_")
     plt.xticks(rotation=rotation)
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -167,7 +167,7 @@ def plot_bar_dict(dictionary, title=None, limit=None, rotation=0):
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 
@@ -186,7 +186,7 @@ def plot_box_and_whisker(data, attribute=None, title=None, limit=None, rotation=
     for i in title:
         if i == " ":
             title = title.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 def hist_helper(column, name, xlabel, ylabel):
@@ -204,7 +204,7 @@ def hist_helper(column, name, xlabel, ylabel):
     for i in name:
         if i == " ":
             name = name.replace(" ", "_")
-    plt.savefig("media/" + name + ".png")
+    plt.savefig("media/" + name + ".jpeg")
     plt.show()
 
 def pie_chart_helper(data, label, title):
@@ -217,7 +217,7 @@ def pie_chart_helper(data, label, title):
     for i in name:
         if i == " ":
             name = name.replace(" ", "_")
-    plt.savefig("media/" + title + ".png")
+    plt.savefig("media/" + title + ".jpeg")
     plt.show()
 
 def bar_chart_helper(x, y, name, xlabel, ylabel):
@@ -236,7 +236,7 @@ def bar_chart_helper(x, y, name, xlabel, ylabel):
     for i in name:
         if i == " ":
             name = name.replace(" ", "_")
-    plt.savefig("media/" + name + ".png")
+    plt.savefig("media/" + name + ".jpeg")
     plt.show()
 
 def scatter_plot_helper(x, y, name, xlabel, ylabel, regression = True):
@@ -260,7 +260,7 @@ def scatter_plot_helper(x, y, name, xlabel, ylabel, regression = True):
     for i in name:
         if i == " ":
             name = name.replace(" ", "_")
-    plt.savefig("media/" + name + ".png")
+    plt.savefig("media/" + name + ".jpeg")
     plt.show()
 
 def compute_slope_intercept(x, y):
